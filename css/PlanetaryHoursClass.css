@@ -1,0 +1,140 @@
+.planetary-hours-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.planetary-hours-header {
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+.planetary-hours-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.planetary-hours-info {
+    font-size: 0.9em;
+    margin-top: 5px;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.planetary-hours-tables {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.planetary-hours-table-container {
+    width: 48%;
+}
+
+.planetary-hours-table-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.planetary-hours-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.planetary-hours-table.day {
+    background-color: #fffde7; /* Faint yellow for day */
+}
+
+.planetary-hours-table.night {
+    background-color: #e3f2fd; /* Faint blue for night */
+}
+
+.planetary-hours-table th,
+.planetary-hours-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.planetary-hours-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.planetary-hours-table td.modifiers span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    margin: 0 2px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    position: relative;
+    cursor: pointer; /* Indicate clickability */
+}
+
+/* Tooltip styling */
+.info-tooltip {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    z-index: 1000000;
+    max-width: 200px;
+    white-space: pre-wrap;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto; /* Ensure interactivity */
+}
+
+/* Hover effect for zodiac balls */
+.planetary-hours-table td.modifiers span.transit:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px; /* 1.5x ball diameter */
+    height: 30px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Current row highlight */
+.planetary-hours-table.day tr.current-row {
+    background-color: #fff5b3;
+    font-weight: bold;
+}
+
+.planetary-hours-table.night tr.current-row {
+    background-color: #c6e2ff;
+    font-weight: bold;
+}
+
+/* Hover effect for table rows */
+.planetary-hours-table.day tr:hover {
+    background-color: #fffef5;
+}
+
+.planetary-hours-table.night tr:hover {
+    background-color: #f0f7ff;
+}
+
+/* Ensure current row highlight takes precedence over hover */
+.planetary-hours-table tr.current-row:hover {
+    background-color: inherit;
+}

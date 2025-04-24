@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Retrograde and Transit Graph</title>
+    <link rel="stylesheet" href="css/RetrogradeAndTransitGraphClass.css" />
+    <script src="js/SataksanColorPalette.js"></script>
+    <script src="js/RetrogradeAndTransitGraphClass.js"></script>
+</head>
+<body>
+<div id="retroGradeAndTransitGraphContainer"></div>
+<script>
+
+
+    const graphItems = [
+        {
+            id: 'month',
+            text: 'Month',
+            color: 'white',
+            foreColor: 'black',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', sign: 'JUL', retrograde: false },
+                { date: '08-01-2024', sign: 'AUG', retrograde: false },
+                { date: '09-01-2024', sign: 'SEP', retrograde: false },
+                { date: '10-01-2024', sign: 'OCT', retrograde: false },
+                { date: '11-01-2024', sign: 'NOV', retrograde: false },
+                { date: '12-01-2024', sign: 'DEC', retrograde: false },
+                { date: '01-01-2025', sign: 'JAN', retrograde: false },
+                { date: '02-01-2025', sign: 'FEB', retrograde: false },
+                { date: '03-01-2025', sign: 'MAR', retrograde: false },
+                { date: '04-01-2025', sign: 'APR', retrograde: false },
+                { date: '05-01-2025', sign: 'MAY', retrograde: false },
+                { date: '06-01-2025', sign: 'JUN', retrograde: false },
+                { date: '07-01-2025', sign: 'JUL', retrograde: false }
+            ],
+            transits: []
+        },
+        {
+            id: 'sun',
+            text: 'Sun',
+            color: 'yellow',
+            foreColor: 'black',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '01-01-2024', retrograde: 'false' },
+                { date: '02-01-2024', retrograde: 'false' },
+                { date: '03-01-2024', retrograde: 'false' },
+                { date: '04-01-2024', retrograde: 'false' },
+                { date: '05-01-2024', retrograde: 'false' },
+                { date: '06-01-2024', retrograde: 'false' },
+                { date: '07-01-2024', retrograde: 'false' },
+                { date: '08-01-2024', retrograde: 'false' },
+                { date: '09-01-2024', retrograde: 'false' },
+                { date: '10-01-2024', retrograde: 'false' },
+                { date: '11-01-2024', retrograde: 'false' },
+                { date: '12-01-2024', retrograde: 'false' },
+                { date: '01-01-2025', retrograde: 'false' },
+                { date: '02-01-2025', retrograde: 'false' },
+                { date: '03-01-2025', retrograde: 'false' },
+                { date: '04-01-2025', retrograde: 'false' },
+                { date: '05-01-2025', retrograde: 'false' },
+                { date: '06-01-2025', retrograde: 'false' },
+                { date: '07-01-2025', retrograde: 'false' },
+                { date: '08-01-2025', retrograde: 'false' },
+                { date: '09-01-2025', retrograde: 'false' },
+                { date: '10-01-2025', retrograde: 'false' },
+                { date: '11-01-2025', retrograde: 'false' },
+                { date: '12-01-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '06-20-2024', sign: 'cancer' },
+                { date: '07-22-2024', sign: 'leo' },
+                { date: '08-22-2024', sign: 'virgo' },
+                { date: '09-22-2024', sign: 'libra' },
+                { date: '10-22-2024', sign: 'scorpio' },
+                { date: '11-21-2024', sign: 'sagittarius' },
+                { date: '12-21-2024', sign: 'capricorn' },
+                { date: '01-19-2025', sign: 'aquarius' },
+                { date: '02-18-2025', sign: 'pisces' },
+                { date: '03-20-2025', sign: 'aries' },
+                { date: '04-19-2025', sign: 'taurus' },
+                { date: '05-20-2025', sign: 'gemini' },
+                { date: '06-20-2025', sign: 'cancer' }
+            ]
+        },
+        {
+            id: 'moon',
+            text: 'Moon',
+            color: 'silver',
+            foreColor: 'black',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '07-21-2024', retrograde: 'true' },
+                { date: '08-04-2024', retrograde: 'false' },
+                { date: '08-19-2024', retrograde: 'true' },
+                { date: '09-02-2024', retrograde: 'false' },
+                { date: '09-17-2024', retrograde: 'true' },
+                { date: '10-02-2024', retrograde: 'false' },
+                { date: '10-17-2024', retrograde: 'true' },
+                { date: '11-01-2024', retrograde: 'false' },
+                { date: '11-15-2024', retrograde: 'true' },
+                { date: '12-01-2024', retrograde: 'false' },
+                { date: '12-15-2024', retrograde: 'true' },
+                { date: '12-30-2024', retrograde: 'false' },
+                { date: '01-13-2025', retrograde: 'true' },
+                { date: '01-29-2025', retrograde: 'false' },
+                { date: '02-12-2025', retrograde: 'true' },
+                { date: '02-27-2025', retrograde: 'false' },
+                { date: '03-14-2025', retrograde: 'true' },
+                { date: '03-29-2025', retrograde: 'false' },
+                { date: '04-12-2025', retrograde: 'true' },
+                { date: '04-27-2025', retrograde: 'false' },
+                { date: '05-12-2025', retrograde: 'true' },
+                { date: '05-26-2025', retrograde: 'false' },
+                { date: '06-11-2025', retrograde: 'true' },
+                { date: '06-25-2025', retrograde: 'false' },
+                { date: '07-10-2025', retrograde: 'true' }
+            ],
+            transits: []
+        },
+        {
+            id: 'mars',
+            text: 'Mars',
+            color: 'red',
+            foreColor: 'black',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '12-06-2024', retrograde: 'true' },
+                { date: '02-23-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '06-09-2024', sign: 'taurus' },
+                { date: '07-20-2024', sign: 'gemini' },
+                { date: '09-04-2024', sign: 'cancer' },
+                { date: '11-03-2024', sign: 'leo' },
+                { date: '01-06-2025', sign: 'cancer' },
+                { date: '04-18-2025', sign: 'leo' },
+                { date: '06-17-2025', sign: 'virgo' }
+            ]
+        },
+        {
+            id: 'mercury',
+            text: 'Mercury',
+            color: 'orange',
+            foreColor: 'black',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '08-05-2024', retrograde: 'true' },
+                { date: '08-28-2024', retrograde: 'false' },
+                { date: '11-25-2024', retrograde: 'true' },
+                { date: '12-15-2024', retrograde: 'false' },
+                { date: '03-15-2025', retrograde: 'true' },
+                { date: '04-07-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '06-02-2024', sign: 'leo' },
+                { date: '07-25-2024', sign: 'virgo' },
+                { date: '08-14-2024', sign: 'leo' },
+                { date: '09-09-2024', sign: 'virgo' },
+                { date: '09-26-2024', sign: 'libra' },
+                { date: '10-13-2024', sign: 'scorpio' },
+                { date: '11-02-2024', sign: 'sagittarius' },
+                { date: '01-08-2025', sign: 'capricorn' },
+                { date: '01-27-2025', sign: 'aquarius' },
+                { date: '02-14-2025', sign: 'pisces' },
+                { date: '03-03-2025', sign: 'aries' },
+                { date: '03-29-2025', sign: 'pisces' },
+                { date: '04-16-2025', sign: 'aries' },
+                { date: '05-10-2025', sign: 'taurus' },
+                { date: '05-25-2025', sign: 'gemini' },
+                { date: '06-08-2025', sign: 'cancer' },
+                { date: '06-26-2025', sign: 'leo' }
+            ]
+        },
+        {
+            id: 'jupiter',
+            text: 'Jupiter',
+            color: 'blue',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '10-09-2024', retrograde: 'true' },
+                { date: '02-04-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '05-25-2024', sign: 'gemini' },
+                { date: '06-09-2025', sign: 'cancer' }
+            ]
+        },
+        {
+            id: 'venus',
+            text: 'Venus',
+            color: 'green',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '03-01-2025', retrograde: 'true' },
+                { date: '04-12-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '07-11-2024', sign: 'leo' },
+                { date: '08-04-2024', sign: 'virgo' },
+                { date: '08-29-2024', sign: 'libra' },
+                { date: '09-22-2024', sign: 'scorpio' },
+                { date: '10-17-2024', sign: 'sagittarius' },
+                { date: '11-11-2024', sign: 'capricorn' },
+                { date: '12-07-2024', sign: 'aquarius' },
+                { date: '01-02-2025', sign: 'pisces' },
+                { date: '02-04-2025', sign: 'aries' },
+                { date: '03-27-2025', sign: 'pisces' },
+                { date: '04-30-2025', sign: 'aries' },
+                { date: '06-06-2025', sign: 'taurus' },
+                { date: '07-04-2025', sign: 'gemini' }
+            ]
+        },
+        {
+            id: 'saturn',
+            text: 'Saturn',
+            color: 'black',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'true' },
+                { date: '11-15-2024', retrograde: 'false' },
+                { date: '07-11-2025', retrograde: 'true' }
+            ],
+            transits: [
+                { date: '03-07-2024', sign: 'pisces' },
+                { date: '05-24-2025', sign: 'aries' }
+            ]
+        },
+        {
+            id: 'uranus',
+            text: 'Uranus',
+            color: '#644117',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '09-01-2024', retrograde: 'true' },
+                { date: '01-30-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '03-06-2019', sign: 'taurus' },
+                { date: '07-07-2025', sign: 'gemini' }
+            ]
+        },
+        {
+            id: 'neptune',
+            text: 'Neptune',
+            color: 'purple',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'true' },
+                { date: '12-07-2024', retrograde: 'false' },
+                { date: '07-04-2025', retrograde: 'true' }
+            ],
+            transits: [
+                { date: '02-03-2012', sign: 'pisces' },
+                { date: '03-30-2025', sign: 'aries' }
+            ]
+        },
+        {
+            id: 'pluto',
+            text: 'Pluto',
+            color: 'rgb(97, 138, 181)',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'true' },
+                { date: '11-11-2024', retrograde: 'false' },
+                { date: '05-04-2025', retrograde: 'true' }
+            ],
+            transits: [
+                { date: '01-20-2024', sign: 'aquarius' },
+                { date: '09-01-2024', sign: 'capricorn' },
+                { date: '11-19-2025', sign: 'aquarius' }
+            ]
+        },
+        {
+            id: 'chiron',
+            text: 'Chiron',
+            color: 'rgb(214, 53, 201)',
+            foreColor: 'white',
+            highlightColor: 'green',
+            retrogrades: [
+                { date: '07-11-2024', retrograde: 'false' },
+                { date: '12-29-2024', retrograde: 'true' },
+                { date: '07-11-2025', retrograde: 'false' }
+            ],
+            transits: [
+                { date: '02-18-2019', sign: 'aries' }
+            ]
+        }
+    ];
+
+    const oneYearWindow = getOneYearWindow(new Date());
+
+    const retrogradeAndTransitGraph = new RetroGradeAndTransitGraphClass({
+        targetDOMElement: document.getElementById('retroGradeAndTransitGraphContainer'),
+        startDate: oneYearWindow.minus6Months,
+        endDate: oneYearWindow.plus6Months,
+        highlightDate: new Date(),
+        items: graphItems,
+        debug: false,
+        background: '#aaaaaa',
+        chartBackground: '#f0f0f0'
+    });
+</script>
+</body>
+</html>

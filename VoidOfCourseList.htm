@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Void of Course Timeline</title>
+    <link rel="stylesheet" href="css/VoidOfCourseListClass.css" />
+    <script src="js/SataksanColorPalette.js"></script>
+    <script src="js/VoidOfCourseListClass.js"></script>
+</head>
+<body style="background-color: #444444;">
+<div id="voidOfCourseListContainer" style="width: 450px; height: 600px; background-color: #ffffff; position: relative;"></div>
+<script>
+    // Sample data for demonstration
+    const voidOfCourseData = {
+        colorPalette,
+        date: new Date('2025-04-24'),
+        duration: 30,
+        voidsOfCourse: [
+            {
+                signBefore: 'aries',
+                dateStart: new Date('2025-04-24T10:00:00'),
+                dateEnd: new Date('2025-04-24T12:30:00'),
+                signAfter: 'taurus'
+            },
+            {
+                signBefore: 'taurus',
+                dateStart: new Date('2025-04-26T15:00:00'),
+                dateEnd: new Date('2025-04-26T17:45:00'),
+                signAfter: 'gemini'
+            },
+            {
+                signBefore: 'gemini',
+                dateStart: new Date('2025-04-28T09:00:00'),
+                dateEnd: new Date('2025-04-28T11:15:00'),
+                signAfter: 'cancer'
+            }
+        ],
+        debug: true
+    };
+
+    // Instantiate the component
+    const voidOfCourseList = new VoidOfCourseListClass({
+        data: voidOfCourseData,
+        parentContainer: document.getElementById('voidOfCourseListContainer'),
+        margin: 10 // Uniform margin of 10px
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+.void-of-course-container {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.void-of-course-header {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.void-of-course-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f5f5f5; /* Faint silver background */
+}
+
+.void-of-course-table th,
+.void-of-course-table td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.void-of-course-table th {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
+
+.void-of-course-table td {
+    color: #333;
+    white-space: nowrap; /* Prevent wrapping in Start - End column */
+}
+
+.void-of-course-table tr:hover {
+    background-color: #f8f8f8; /* Lighter background on hover */
+}
+
+.highlight-row {
+    background-color: #e0e0e0; /* Light grey for highlighted row */
+}
+
+.highlight-row td {
+    font-weight: bold; /* Bold text in highlighted row */
+}
+
+.sign-ball {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.sign-ball:hover {
+    transform: scale(1.2);
+}
+
+.highlight-ball {
+    transform: scale(1.2);
+}
+
+.sign-ball::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.info-tooltip {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    z-index: 1000000;
+    max-width: 200px;
+    white-space: pre-wrap;
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}

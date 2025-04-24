@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Planetary Hours</title>
+    <link rel="stylesheet" href="css/PlanetaryHoursClass.css" />
+    <script src="js/SataksanColorPalette.js"></script>
+    <script src="js/PlanetaryHoursClass.js"></script>
+</head>
+<body style="background-color: #444444;">
+<div id="planetaryHoursContainer" style="width: 900px; height: 700px; background-color: #ffffff; position: relative;"></div>
+<script>
+    // Example instantiation
+    const planetaryHoursData = {
+        colorPalette: colorPalette,
+        date: new Date(), // Apr 24, 2025, 12:51 AM
+        location: "Redmond, WA, USA",
+        planetRetrogrades: [
+            { planet: 'mercury', retrogradeStart: new Date(2025, 3, 20), retrogradeEnd: new Date(2025, 3, 30) }
+        ],
+        planetTransits: [
+            { date: new Date(2025, 3, 24), sign: 'aries' }
+        ],
+        debug: false
+    };
+
+    const planetaryHours = new PlanetaryHoursClass({
+        data: planetaryHoursData,
+        parentContainer: document.getElementById('planetaryHoursContainer'),
+        margin: 10
+    });
+</script>
+</body>
+</html>

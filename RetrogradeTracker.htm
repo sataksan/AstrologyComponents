@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Retrograde Tracker</title>
+    <link rel="stylesheet" href="css/RetrogradeTrackerClass.css" />
+    <script src="js/SataksanColorPalette.js"></script>
+    <script src="js/RetrogradeTrackerClass.js"></script>
+</head>
+<body>
+<div id="retrogradeTrackerContainer" style="width: 800px; height: 200px;"></div>
+<script>
+    // Example usage
+    let retrogradeData = {
+        planet: 'mercury',
+        planetDate: new Date(),
+        startingSign: 'aries',
+        debug: false,
+        retrogradeShadowStart: new Date('2025-02-28'),
+        retrogradeStart: new Date('March 15, 2025 02:49:00'),
+        retrogradeStartDegree: '9° Aries 35\'',
+        retrogradeEnd: new Date('April 7, 2025 07:11:00'),
+        retrogradeEndDegree: '26° Pisces 49\'',
+        retrogradeShadowEnd: new Date('2025-04-25'),
+        margin: {
+            left: 24,
+            top: 24,
+            right: 24,
+            bottom: 24
+        },
+        rulerMargin: 24,
+        highlightColor: '#00FF00',
+        degreeTextMargin: 12,
+        annotationColor: '#888888',
+        transits: [/*
+        { date: new Date('2025-03-15T02:49:00'), sign: 'taurus' },
+        { date: new Date('2025-04-07T07:11:00'), sign: 'gemini' },
+        { date: new Date('2025-03-14'), sign: 'aries' },
+        { date: new Date('2025-03-17'), sign: 'aries' },
+        { date: new Date('2025-03-15'), sign: 'aries' },
+        { date: new Date('2025-03-16'), sign: 'aries' },
+        { date: new Date('2025-03-13'), sign: 'aries' },
+        { date: new Date('2025-03-18'), sign: 'aries' },
+        { date: new Date('2025-03-12'), sign: 'aries' },
+        { date: new Date('2025-03-19'), sign: 'aries' },
+    { date: new Date('2025-03-23'), sign: 'aries' },
+    { date: new Date('2025-03-24'), sign: 'aries' },
+    { date: new Date('2025-03-25'), sign: 'aries' },
+    { date: new Date('2025-03-26'), sign: 'aries' },
+    { date: new Date('2025-03-27'), sign: 'aries' },
+    { date: new Date('2025-03-28'), sign: 'aries' },
+    { date: new Date('2025-03-29'), sign: 'aries' },
+    { date: new Date('2025-03-30'), sign: 'aries' },
+    { date: new Date('2025-03-31'), sign: 'aries' },
+    { date: new Date('2025-04-01'), sign: 'aries' },
+    { date: new Date('2025-04-02'), sign: 'aries' },
+    { date: new Date('2025-04-03'), sign: 'aries' },
+    { date: new Date('2025-04-04'), sign: 'aries' },
+    { date: new Date('2025-04-05'), sign: 'aries' },
+    { date: new Date('2025-04-06'), sign: 'aries' },
+    { date: new Date('2025-04-07'), sign: 'aries' },
+    { date: new Date('2025-04-07T07:12:00'), sign: 'aries' },
+    { date: new Date('2025-04-07T12:00:00'), sign: 'aries' },
+    { date: new Date('2025-04-08'), sign: 'aries' },
+    { date: new Date('2025-04-08T12:00:00'), sign: 'aries' },
+    { date: new Date('2025-04-09'), sign: 'aries' },
+    { date: new Date('2025-04-10'), sign: 'aries' },
+    { date: new Date('2025-04-11'), sign: 'aries' },
+    { date: new Date('2025-04-21'), sign: 'aries' },
+    { date: new Date('2025-04-22'), sign: 'aries' },
+    { date: new Date('2025-04-22T06:00:00'), sign: 'aries' },
+    { date: new Date('2025-04-22T12:00:00'), sign: 'aries' },
+    { date: new Date('2025-04-23'), sign: 'aries' },
+    { date: new Date('2025-04-23T12:00:00'), sign: 'aries' },
+    { date: new Date('2025-04-24'), sign: 'aries' },
+    { date: new Date('2025-04-25'), sign: 'aries' }//*/
+        ]
+    };
+    /*
+    retrogradeData = {
+      planet: 'mercury',
+      startingSign: 'aries',
+      retrogradeShadowStart: new Date('2025-04-01'),
+      retrogradeStart: new Date('2025-04-23'),
+      retrogradeEnd: new Date('2025-07-18'),
+      retrogradeShadowEnd: new Date('2025-08-11'),
+      transits: [
+        { date: new Date('2025-03-31'), sign: 'taurus' },
+        { date: new Date('2025-08-12'), sign: 'taurus' },
+        { date: new Date('2025-04-01'), sign: 'aries' },
+        { date: new Date('2025-04-02'), sign: 'taurus' },
+        { date: new Date('2025-04-03'), sign: 'gemini' },
+        { date: new Date('2025-04-04'), sign: 'cancer' },
+        { date: new Date('2025-04-05'), sign: 'leo' },
+        { date: new Date('2025-04-06'), sign: 'virgo' },
+        { date: new Date('2025-04-07'), sign: 'libra' },
+        { date: new Date('2025-04-08'), sign: 'scorpio' },
+        { date: new Date('2025-04-09'), sign: 'sagittarius' },
+        { date: new Date('2025-04-10'), sign: 'capricorn' },
+        { date: new Date('2025-04-11'), sign: 'aquarius' },
+        { date: new Date('2025-04-12'), sign: 'pisces' },
+        { date: new Date('2025-04-23'), sign: 'aries' },
+        { date: new Date('2025-04-24'), sign: 'aries' },
+        { date: new Date('2025-04-25'), sign: 'aries' },
+        { date: new Date('2025-04-26'), sign: 'aries' },
+        { date: new Date('2025-04-27'), sign: 'aries' },
+        { date: new Date('2025-04-28'), sign: 'aries' },
+        { date: new Date('2025-04-29'), sign: 'aries' },
+        { date: new Date('2025-04-30'), sign: 'aries' },
+        { date: new Date('2025-04-31'), sign: 'aries' },
+        { date: new Date('2025-05-02'), sign: 'aries' },
+        { date: new Date('2025-05-03'), sign: 'aries' },
+        { date: new Date('2025-05-04'), sign: 'aries' },
+        { date: new Date('2025-05-05'), sign: 'aries' },
+        { date: new Date('2025-05-06'), sign: 'aries' },
+        { date: new Date('2025-05-07'), sign: 'aries' },
+        { date: new Date('2025-05-08'), sign: 'aries' },
+        { date: new Date('2025-05-09'), sign: 'aries' },
+        { date: new Date('2025-05-10'), sign: 'aries' },
+        { date: new Date('2025-07-18'), sign: 'leo' }
+      ]
+    };
+    //*/
+    const tracker = new RetrogradeTrackerClass({
+        data: retrogradeData,
+        parentContainer: document.getElementById('retrogradeTrackerContainer')
+    });
+</script>
+</body>
+</html>

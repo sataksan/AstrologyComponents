@@ -1,0 +1,122 @@
+body {
+    background: #20262E;
+    padding: 20px;
+    font-family: Helvetica;
+}
+
+/* Style for information popups */
+.info-popup {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+    line-height: 1.4;
+    z-index: 1000;
+    max-width: 200px;
+    white-space: pre-wrap;
+    pointer-events: auto;
+}
+
+/* Ensure chart container allows popup overflow */
+#retroGradeAndTransitGraphContainer {
+    position: relative;
+    overflow: visible;
+}
+
+/* Timeline div with selective borders */
+.timeline {
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    box-sizing: border-box;
+}
+
+/* Apply top border only to the first timeline row */
+.timeline.first {
+    border-top: 1px solid black;
+}
+
+/* Remove bottom border from the last row to prevent double border */
+.timeline:last-child {
+    border-bottom: none;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background: inherit;
+}
+
+li {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 16px;
+    line-height: 16px;
+    background: inherit;
+    display: block;
+    float: none;
+    box-sizing: border-box;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 16px;
+    width: 100%;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+div[style*="position: absolute"] {
+    box-sizing: border-box;
+}
+
+div[style*="width: 75px"] {
+    white-space: nowrap;
+    color: #000;
+    z-index: 5;
+    flex-shrink: 0;
+    position: relative;
+}
+
+/* Ensure hatched patterns are applied correctly */
+div[style*="repeating-linear-gradient"] {
+    background-size: 5px 5px;
+}
+
+/* Styles for retrograde and direct bars */
+div.retrograde-bar,
+div.direct-bar {
+    position: absolute;
+    z-index: 3;
+}
+
+/* Hover effect for bars: lighten the content */
+div.retrograde-bar:hover,
+div.direct-bar:hover {
+    filter: brightness(1.2) !important;
+    transition: filter 0.2s ease !important;
+}
+
+/* Styles for transit glyphs */
+div.transit-glyph {
+    position: absolute;
+    z-index: 3;
+}
+
+/* Hover effect for glyphs: yellow circular gradient */
+div.transit-glyph:hover {
+    background: radial-gradient(circle, rgba(255, 255, 0, 0.5), transparent) !important;
+    transition: background 0.2s ease !important;
+}
