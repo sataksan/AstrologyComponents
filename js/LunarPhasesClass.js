@@ -561,8 +561,9 @@ class LunarPhaseClass {
         const containerWidth = this.container.offsetWidth - paddingLeft - paddingRight;
         const timelineLeft = this.margin.left;
         const timelineRight = containerWidth - this.margin.right;
-        const firstCenterX = timelineLeft + 80; // Align with 1st phase
-        const lastCenterX = timelineRight - 80; // Align with 4th phase
+        const blockWidth = 80; // Width of each major phase block
+        const firstCenterX = timelineLeft + blockWidth / 2; // Center of first glyph
+        const lastCenterX = timelineRight - blockWidth / 2; // Center of last glyph
         const xStartWaypoint = phases[0].date;
         const xEndWaypoint = phases[phases.length - 1].date; // Use last phase date for phase positioning
 
@@ -573,119 +574,116 @@ class LunarPhaseClass {
             block.className = 'lunar-phase-block';
             const graphicClass = phase.name.toLowerCase().replace(' ', '-');
             block.innerHTML = `
-                <p>${phase.name}</p>
-                <div class="lunar-phase-graphic ${graphicClass}">${majorPhaseSymbols[phase.name]}</div>
-                <p>${formatter.format(phase.date)}</p>
-                <p>${timeFormatter.format(phase.date)}</p>
-                ${phase.name === 'Full Moon' && phase.fullMoonName ? `<p>${phase.fullMoonName}</p>` : ''}
-            `;
+            <p>${phase.name}</p>
+            <div class="lunar-phase-graphic ${graphicClass}">${majorPhaseSymbols[phase.name]}</div>
+            <p>${formatter.format(phase.date)}</p>
+            <p>${timeFormatter.format(phase.date)}</p>
+            ${phase.name === 'Full Moon' && phase.fullMoonName ? `<p>${phase.fullMoonName}</p>` : ''}
+        `;
             majorPhasesContainer.appendChild(block);
             majorBlocks.push(block);
 
-            // Reposition 2nd and 3rd blocks (indices 1 and 2)
-            if (i === 1 || i === 2) {
-                const xPos = this.dateToX(phase.date, firstCenterX, lastCenterX, xStartWaypoint, xEndWaypoint, timelineLeft, timelineRight);
-                const blockWidth = 80;
-                const leftPos = xPos - blockWidth / 2; // Center glyph at xPos
+            // Reposition all blocks to align with tick marks
+            const xPos = this.dateToX(phase.date, firstCenterX, lastCenterX, xStartWaypoint, xEndWaypoint, timelineLeft, timelineRight);
+            const leftPos = xPos - blockWidth / 2; // Center glyph at xPos
 
-                // Log before positioning
-                const graphic = block.querySelector('.lunar-phase-graphic');
-                let preRect = graphic.getBoundingClientRect();
-                let containerRect = this.container.getBoundingClientRect();
-                const preCenterX = preRect.left - containerRect.left - paddingLeft + preRect.width / 2;
-                const computedStyle = window.getComputedStyle(block);
-                const blockStyles = {
-                    position: computedStyle.position,
-                    left: computedStyle.left,
-                    right: computedStyle.right,
-                    margin: computedStyle.margin,
-                    marginLeft: computedStyle.marginLeft,
-                    padding: computedStyle.padding,
-                    paddingLeft: computedStyle.paddingLeft,
-                    transform: computedStyle.transform,
-                    display: computedStyle.display,
-                    visibility: computedStyle.visibility,
-                    boxSizing: computedStyle.boxSizing,
-                    float: computedStyle.float,
-                    clear: computedStyle.clear
-                };
-                const parentStyles = {
-                    blocks: window.getComputedStyle(blocksContainer),
-                    majorPhases: window.getComputedStyle(majorPhasesContainer)
-                };
+            // Log before positioning
+            const graphic = block.querySelector('.lunar-phase-graphic');
+            let preRect = graphic.getBoundingClientRect();
+            let containerRect = this.container.getBoundingClientRect();
+            const preCenterX = preRect.left - containerRect.left - paddingLeft + preRect.width / 2;
+            const computedStyle = window.getComputedStyle(block);
+            const blockStyles = {
+                position: computedStyle.position,
+                left: computedStyle.left,
+                right: computedStyle.right,
+                margin: computedStyle.margin,
+                marginLeft: computedStyle.marginLeft,
+                padding: computedStyle.padding,
+                paddingLeft: computedStyle.paddingLeft,
+                transform: computedStyle.transform,
+                display: computedStyle.display,
+                visibility: computedStyle.visibility,
+                boxSizing: computedStyle.boxSizing,
+                float: computedStyle.float,
+                clear: computedStyle.clear
+            };
+            const parentStyles = {
+                blocks: window.getComputedStyle(blocksContainer),
+                majorPhases: window.getComputedStyle(majorPhasesContainer)
+            };
 
-                // Set position with requestAnimationFrame
-                requestAnimationFrame(() => {
-                    block.style.position = 'absolute';
-                    block.style.left = `${leftPos}px`;
-                    block.style.right = 'auto';
-                    block.style.margin = '0';
-                    block.style.padding = '0';
-                    block.style.transform = 'none';
-                    block.style.boxSizing = 'border-box';
-                    block.style.float = 'none';
-                    block.style.clear = 'none';
+            // Set position with requestAnimationFrame
+            requestAnimationFrame(() => {
+                block.style.position = 'absolute';
+                block.style.left = `${leftPos}px`;
+                block.style.right = 'auto';
+                block.style.margin = '0';
+                block.style.padding = '0';
+                block.style.transform = 'none';
+                block.style.boxSizing = 'border-box';
+                block.style.float = 'none';
+                block.style.clear = 'none';
 
-                    // Check DOM position and adjust if needed
-                    const postRect = graphic.getBoundingClientRect();
-                    const postCenterX = postRect.left - containerRect.left - paddingLeft + postRect.width / 2;
-                    const expectedCenterX = xPos;
+                // Check DOM position and adjust if needed
+                const postRect = graphic.getBoundingClientRect();
+                const postCenterX = postRect.left - containerRect.left - paddingLeft + postRect.width / 2;
+                const expectedCenterX = xPos;
 
-                    let adjustedLeftPos = leftPos;
-                    if (Math.abs(postCenterX - expectedCenterX) > 1) {
-                        adjustedLeftPos = leftPos + (expectedCenterX - postCenterX);
-                        block.style.left = `${adjustedLeftPos}px`;
-                    }
+                let adjustedLeftPos = leftPos;
+                if (Math.abs(postCenterX - expectedCenterX) > 1) {
+                    adjustedLeftPos = leftPos + (expectedCenterX - postCenterX);
+                    block.style.left = `${adjustedLeftPos}px`;
+                }
 
-                    // Log after positioning
-                    const finalRect = graphic.getBoundingClientRect();
-                    const finalCenterX = finalRect.left - containerRect.left - paddingLeft + finalRect.width / 2;
+                // Log after positioning
+                const finalRect = graphic.getBoundingClientRect();
+                const finalCenterX = finalRect.left - containerRect.left - paddingLeft + finalRect.width / 2;
 
-                    if (this.data.debug) {
-                        console.log(`Repositioning Major Phase Block ${i + 1}:`, {
-                            phase: phase.name,
-                            dateLocal: phase.date.toString(),
-                            xPos,
-                            leftPos,
-                            adjustedLeftPos: Math.abs(postCenterX - expectedCenterX) > 1 ? adjustedLeftPos : null,
-                            glyphCenterX: expectedCenterX,
-                            preCenterX,
-                            postCenterX,
-                            finalCenterX,
-                            blockWidth,
-                            timelineLeft,
-                            timelineRight,
-                            containerOffsetWidth: this.container.offsetWidth,
-                            containerWidth,
-                            paddingLeft,
-                            paddingRight,
-                            parentOffsetLeft: blocksContainer.offsetLeft,
-                            blockStyles,
-                            parentStyles: {
-                                blocks: {
-                                    margin: parentStyles.blocks.margin,
-                                    marginLeft: parentStyles.blocks.marginLeft,
-                                    padding: parentStyles.blocks.padding,
-                                    paddingLeft: parentStyles.blocks.paddingLeft,
-                                    transform: parentStyles.blocks.transform,
-                                    position: parentStyles.blocks.position,
-                                    left: parentStyles.blocks.left
-                                },
-                                majorPhases: {
-                                    margin: parentStyles.majorPhases.margin,
-                                    marginLeft: parentStyles.majorPhases.marginLeft,
-                                    padding: parentStyles.majorPhases.padding,
-                                    paddingLeft: parentStyles.majorPhases.paddingLeft,
-                                    transform: parentStyles.majorPhases.transform,
-                                    position: parentStyles.majorPhases.position,
-                                    left: parentStyles.majorPhases.left
-                                }
+                if (this.data.debug) {
+                    console.log(`Repositioning Major Phase Block ${i + 1}:`, {
+                        phase: phase.name,
+                        dateLocal: phase.date.toString(),
+                        xPos,
+                        leftPos,
+                        adjustedLeftPos: Math.abs(postCenterX - expectedCenterX) > 1 ? adjustedLeftPos : null,
+                        glyphCenterX: expectedCenterX,
+                        preCenterX,
+                        postCenterX,
+                        finalCenterX,
+                        blockWidth,
+                        timelineLeft,
+                        timelineRight,
+                        containerOffsetWidth: this.container.offsetWidth,
+                        containerWidth,
+                        paddingLeft,
+                        paddingRight,
+                        parentOffsetLeft: blocksContainer.offsetLeft,
+                        blockStyles,
+                        parentStyles: {
+                            blocks: {
+                                margin: parentStyles.blocks.margin,
+                                marginLeft: parentStyles.blocks.marginLeft,
+                                padding: parentStyles.blocks.padding,
+                                paddingLeft: parentStyles.blocks.paddingLeft,
+                                transform: parentStyles.blocks.transform,
+                                position: parentStyles.blocks.position,
+                                left: parentStyles.blocks.left
                             },
-                            note: 'Compare glyphCenterX and finalCenterX with debugLeft in renderScale. If misaligned, check blockStyles (left, marginLeft, transform) and parentStyles for offsets (marginLeft, paddingLeft, transform).'
-                        });
-                    }
-                });
-            }
+                            majorPhases: {
+                                margin: parentStyles.majorPhases.margin,
+                                marginLeft: parentStyles.majorPhases.marginLeft,
+                                padding: parentStyles.majorPhases.padding,
+                                paddingLeft: parentStyles.majorPhases.paddingLeft,
+                                transform: parentStyles.majorPhases.transform,
+                                position: parentStyles.majorPhases.position,
+                                left: parentStyles.majorPhases.left
+                            }
+                        },
+                        note: 'Compare glyphCenterX and finalCenterX with debugLeft in renderScale. If misaligned, check blockStyles (left, marginLeft, transform) and parentStyles for offsets (marginLeft, paddingLeft, transform).'
+                    });
+                }
+            });
         }
 
         // After rendering major blocks, position the intermediate phase blocks
@@ -745,22 +743,25 @@ class LunarPhaseClass {
                 intermediateBlock.style.top = `${intermediateTop}px`;
                 intermediateBlock.style.transform = 'translateX(-50%)';
                 intermediateBlock.innerHTML = `
-                    <div class="intermediate-phase-graphic">${intermediatePhaseSymbols[intermediatePhase]}</div>
-                `;
+                <div class="intermediate-phase-graphic">${intermediatePhaseSymbols[intermediatePhase]}</div>
+            `;
                 blocksContainer.appendChild(intermediateBlock);
             }
         }
     }
 
-    renderTransitsAndVoids(phases, firstCenterX, lastCenterX, xStartWaypoint, xEndWaypoint, timelineLeft, timelineRight, transitMarkerTop, voidMarkerTop, transitLineTop, transitLineHeight, voidLineTop, voidLineHeight, markerLineWidth, pixelsPerMs, rulerStartDate, rulerEndDate) {
+    renderTransitsAndVoids(phases, firstCenterX, lastCenterX, xStartWaypoint, xEndWaypoint, timelineLeft, timelineRight, transitMarkerTop, voidMarkerTop, transitLineTop, transitLineHeight, voidLineTop, voidLineHeight, marginLineWidth, pixelsPerMs, rulerStartDate, rulerEndDate) {
         const blocksContainer = this.container.querySelector('.lunar-phase-blocks');
         const ruler = this.container.querySelector('.ruler');
         const rulerHeight = ruler ? ruler.offsetHeight : 20; // Match ruler height
         const paddingLeft = parseFloat(this.container.style.paddingLeft) || 0;
         const blocksPaddingTop = parseFloat(getComputedStyle(blocksContainer).paddingTop) || 0;
         const currentDateLine = this.container.querySelector('.current-date-line');
-        const currentDateLineHeight = currentDateLine ? currentDateLine.offsetHeight : (this.container?.offsetHeight || 400);
-        const rulerTop = blocksPaddingTop + currentDateLineHeight - this.margin.bottom - 20 + 1;
+        const containerHeight = this.container?.offsetHeight || 400;
+        const header = this.container.querySelector('.lunar-phase-header');
+        const headerHeight = header ? header.offsetHeight : 0;
+        const adjustedHeight = containerHeight - headerHeight - 2 * rulerHeight - 2 * this.margin.bottom;
+        const rulerTop = blocksPaddingTop + adjustedHeight;
 
         // Find current or most recent transit/void-of-course
         let highlightTransitIndex = -1;
@@ -784,7 +785,7 @@ class LunarPhaseClass {
             }
         });
 
-        // Render transits within ruler's date range
+        // Render transits within ruler's date range and position bounds
         this.data.transits.forEach((transit, index) => {
             const transitDate = new Date(transit.date);
             // Skip transits before rulerStartDate or after rulerEndDate
@@ -806,6 +807,20 @@ class LunarPhaseClass {
             // Calculate transit position using the extended timeline
             const timeOffset = transitDate.getTime() - xStartWaypoint.getTime();
             const transitPos = firstCenterX + (timeOffset * pixelsPerMs);
+
+            // Skip transit if position is beyond timelineRight
+            if (transitPos > timelineRight) {
+                if (this.data.debug) {
+                    console.log(`Transit ${index + 1} Skipped:`, {
+                        transitDateLocal: transitDate.toString(),
+                        transitPos,
+                        reason: 'Position beyond timelineRight',
+                        timelineRight
+                    });
+                }
+                return;
+            }
+
             const clampedTransitPos = Math.max(timelineLeft, Math.min(transitPos, timelineRight));
 
             // Add vertical line for zodiac sign marker
@@ -874,14 +889,28 @@ class LunarPhaseClass {
 
                 const voidTimeOffset = voidDate.getTime() - xStartWaypoint.getTime();
                 const voidPos = firstCenterX + (voidTimeOffset * pixelsPerMs);
+
+                // Skip void if position is beyond timelineRight
+                if (voidPos > timelineRight) {
+                    if (this.data.debug) {
+                        console.log(`Void ${index + 1} Skipped:`, {
+                            voidDateLocal: voidDate.toString(),
+                            voidPos,
+                            reason: 'Position beyond timelineRight',
+                            timelineRight
+                        });
+                    }
+                    return;
+                }
+
                 const clampedVoidPos = Math.max(timelineLeft, Math.min(voidPos, timelineRight));
 
                 // Add vertical line for void-of-course marker with specific class
                 const voidLine = document.createElement('div');
                 voidLine.className = 'void-marker-line';
                 voidLine.style.left = `${clampedVoidPos}px`;
-                voidLine.style.top = `${voidLineTop + blocksPaddingTop}px`; // Move 4px down from previous
-                voidLine.style.height = `${voidLineHeight + 8}px`; // Reduce by 4px to keep black bottom fixed
+                voidLine.style.top = `${voidLineTop + blocksPaddingTop}px`;
+                voidLine.style.height = `${voidLineHeight + 8}px`;
                 voidLine.style.zIndex = '1';
                 blocksContainer.appendChild(voidLine);
 
@@ -978,8 +1007,9 @@ class LunarPhaseClass {
         const containerWidth = this.container.offsetWidth - paddingLeft - paddingRight;
         const timelineLeft = this.margin.left;
         const timelineRight = containerWidth - this.margin.right;
-        const firstCenterX = timelineLeft + 80; // Align with 1st phase
-        const lastCenterX = timelineRight - 80; // Align with 4th phase
+        const blockWidth = 80; // Width of each major phase block
+        const firstCenterX = timelineLeft + blockWidth / 2; // Center of first glyph
+        const lastCenterX = timelineRight - blockWidth / 2; // Center of last glyph
         const xStartWaypoint = phases[0].date;
         const phaseXEndWaypoint = phases[phases.length - 1].date; // Use last phase date for phase positioning
 
@@ -1025,7 +1055,7 @@ class LunarPhaseClass {
             const firstGraphicRect = firstGraphic.getBoundingClientRect();
             const lastGraphicRect = lastGraphic.getBoundingClientRect();
             const computedFirstCenterX = firstGraphicRect.left - blocksRect.left + firstGraphicRect.width / 2;
-            const computedLastCenterX = lastGraphicRect.left - blocksRect.left + lastGraphicRect.width / 2;
+            const computedLastCenterX = lastGraphicRect.left - blocksRect.left + firstGraphicRect.width / 2;
             const paddingTop = parseFloat(this.container.style.paddingTop) || 0;
             const paddingBottom = parseFloat(this.container.style.paddingBottom) || 0;
             const header = this.container.querySelector('.lunar-phase-header');
@@ -1114,13 +1144,40 @@ class LunarPhaseClass {
         }
 
         // Width of the vertical lines for centering
-        const markerLineWidth = 2;
+        const marginLineWidth = 2;
+
+        // Calculate ruler top to determine current date line height
+        const blocksPaddingTop = blocksContainer ? parseFloat(getComputedStyle(blocksContainer).paddingTop) || 0 : 0;
+        const header = this.container.querySelector('.lunar-phase-header');
+        const headerHeight = header ? header.offsetHeight : 0;
+        const rulerHeight = 20; // Match ruler height
+        const currentDateLineHeight = containerHeight; // Retain original for other calculations
+        const adjustedHeight = currentDateLineHeight - headerHeight - 2 * rulerHeight - 2 * this.margin.bottom;
+        const rulerTop = blocksPaddingTop + adjustedHeight;
+        const currentLineHeight = rulerTop; // Height to reach ruler top
 
         // Render current date line
         const currentPos = this.dateToX(this.data.date, firstCenterX, lastCenterX, xStartWaypoint, phaseXEndWaypoint, timelineLeft, timelineRight - 3);
         const currentLine = document.createElement('div');
         currentLine.className = 'current-date-line';
         currentLine.style.left = `${currentPos}px`;
+        requestAnimationFrame(() => {
+            currentLine.style.height = `${currentLineHeight}px`; // Set height to reach ruler top
+            if (this.data.debug) {
+                const computedStyle = getComputedStyle(currentLine);
+                const rect = currentLine.getBoundingClientRect();
+                console.log('Current Date Line Rendered:', {
+                    styleHeight: currentLine.style.height,
+                    computedHeight: computedStyle.height,
+                    currentLineHeight,
+                    rulerTop,
+                    blocksPaddingTop,
+                    containerHeight,
+                    headerHeight,
+                    bottomEdge: rect.top - containerRect.top + parseFloat(computedStyle.height)
+                });
+            }
+        });
         currentLine.innerHTML = `
         <div class="current-date-line-outer left"></div>
         <div class="current-date-line-inner"></div>
@@ -1129,7 +1186,7 @@ class LunarPhaseClass {
         blocksContainer.appendChild(currentLine);
 
         // Render transits and void-of-course markers
-        this.renderTransitsAndVoids(phases, firstCenterX, lastCenterX, xStartWaypoint, finalXEndWaypoint, timelineLeft, timelineRight, transitMarkerTop, voidMarkerTop, transitLineTop, transitLineHeight, voidLineTop, voidLineHeight, markerLineWidth, pixelsPerMs, rulerStartDate, rulerEndDate);
+        this.renderTransitsAndVoids(phases, firstCenterX, lastCenterX, xStartWaypoint, finalXEndWaypoint, timelineLeft, timelineRight, transitMarkerTop, voidMarkerTop, transitLineTop, transitLineHeight, voidLineTop, voidLineHeight, marginLineWidth, pixelsPerMs, rulerStartDate, rulerEndDate);
 
         // Render the tracker bar before the ruler
         this.renderTrackerBar();
@@ -1240,17 +1297,39 @@ class LunarPhaseClass {
         const currentDateLine = this.container.querySelector('.current-date-line');
         const currentDateLineHeight = currentDateLine ? currentDateLine.offsetHeight : containerHeight;
 
+        // Calculate header height
+        const header = this.container.querySelector('.lunar-phase-header');
+        const headerHeight = header ? header.offsetHeight : 0;
+
         // Render ruler
         const ruler = document.createElement('div');
         ruler.className = 'ruler';
         ruler.style.position = 'absolute';
         ruler.style.left = `0px`;
         ruler.style.right = `0px`;
-        const rulerTop = blocksPaddingTop + currentDateLineHeight - this.margin.bottom - 20 + 1;
-        const rulerHeight = 20;
-        ruler.style.top = `${rulerTop}px`;
-        ruler.style.height = `${rulerHeight}px`;
-        ruler.style.background = '#ccc';
+        const rulerHeight = 20; // Match ruler height
+        const adjustedHeight = containerHeight - headerHeight - 2 * rulerHeight - 2 * this.margin.bottom;
+        const rulerTop = blocksPaddingTop + adjustedHeight;
+        requestAnimationFrame(() => {
+            ruler.style.top = `${rulerTop}px`;
+            ruler.style.height = `${rulerHeight}px`;
+            ruler.style.background = '#ccc';
+            if (this.data.debug) {
+                const computedStyle = getComputedStyle(ruler);
+                console.log('Ruler Rendered:', {
+                    styleTop: ruler.style.top,
+                    computedTop: computedStyle.top,
+                    rulerTop,
+                    rulerHeight,
+                    adjustedHeight,
+                    headerHeight,
+                    blocksPaddingTop,
+                    containerHeight,
+                    computedMargin: computedStyle.margin,
+                    computedPadding: computedStyle.padding
+                });
+            }
+        });
         blocksContainer.appendChild(ruler);
 
         if (this.data.debug) {
@@ -1262,8 +1341,10 @@ class LunarPhaseClass {
                 currentDateLineHeight,
                 rulerTop,
                 rulerHeight,
+                headerHeight,
                 rulerRectLeft: rulerRect.left - containerRect.left,
                 rulerRectWidth: rulerRect.width,
+                rulerRectTop: rulerRect.top - containerRect.top,
                 paddingLeft
             });
         }
@@ -1294,7 +1375,7 @@ class LunarPhaseClass {
                 console.log(`Phase ${index + 1} Centerpoint:`, {
                     phase: phase.name,
                     dateLocal: phase.date.toString(),
-                    dateUTC: phase.toUTCString(),
+                    dateUTC: phase.date.toUTCString(),
                     centerX: phaseCenters[index],
                     timeLinearX: xPos,
                     debugLeft,
@@ -1343,6 +1424,21 @@ class LunarPhaseClass {
         while (currentTick.getTime() <= endTickTime) {
             const timeOffset = currentTick.getTime() - xStartWaypoint.getTime();
             const tickPos = firstCenterX + (timeOffset * pixelsPerMs);
+
+            // Skip tick if position is beyond timelineRight
+            if (tickPos > timelineRight) {
+                if (this.data.debug) {
+                    console.log(`Tick Skipped:`, {
+                        dateLocal: currentTick.toString(),
+                        tickPos,
+                        reason: 'Position beyond timelineRight',
+                        timelineRight
+                    });
+                }
+                currentTick = new Date(currentTick.getTime() + sixHours);
+                continue;
+            }
+
             const clampedTickPos = Math.max(timelineLeft, Math.min(tickPos, timelineRight));
             const tick = document.createElement('div');
             tick.className = 'ruler-tick';

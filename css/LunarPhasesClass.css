@@ -82,14 +82,13 @@
 .current-date-line {
     position: absolute;
     width: 3px;
-    height: 100%;
     top: 0;
 }
 
 .current-date-line-inner {
     position: absolute;
     width: 1px;
-    height: 100%;
+    height: 100%; /* Match parent height */
     background: green;
     left: 1px;
 }
@@ -97,7 +96,7 @@
 .current-date-line-outer {
     position: absolute;
     width: 1px;
-    height: 100%;
+    height: 100%; /* Match parent height */
     background: black;
 }
 
