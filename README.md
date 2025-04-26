@@ -5,6 +5,10 @@ A collection of javascript DOM components for use in the display of astrology da
 Interactive timeline of planetary retrogrades and transits listing all planets in a single view.
 ![Retrograde and Transit Graph Astrology Component Screenshot](img/RetrogradeAndTransitGraph.png)
 
+### LunarPhasesClass
+Interactive timeline of lunar phases, voids of course, and transits.
+![Lunar Phases Component Screenshot](img/LunarPhases.png)
+
 ### RetrogradeTrackerClass
 An interactive retrograde tracking graph.
 ![Retrograde Tracker Astrology Component Screenshot](img/RetrogradeTracker.png)

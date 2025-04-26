@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lunar Phases</title>
+    <link rel="stylesheet" href="css/LunarPhasesClass.css" />
+    <script src="js/SataksanColorPalette.js"></script>
+    <script src="js/LunarPhasesClass.js"></script>
+</head>
+<body style="background-color: #444444;">
+<div id="lunarPhaseContainer" style="width: 800px; height: 400px; background-color: #ffffff; position: relative;"></div>
+<script>
+    // Example usage with sample data
+    const lunarPhaseDataSample = {
+        colorPalette: colorPalette,
+        date: new Date(),
+        location: "Redmond, WA, USA",
+        moonInfo: {
+            nextFullMoon: new Date('2025-05-12T12:55:00'),
+            nextNewMoon: new Date('2025-04-27T15:31:00'),
+            nextFirstQuarter: new Date('2025-05-04T09:51:00'),
+            nextThirdQuarter: new Date('2025-05-20T09:35:00'),
+            previousFullMoon: new Date('2025-04-13T12:55:00'),
+            previousNewMoon: new Date('2025-03-29T15:31:00'),
+            previousFirstQuarter: new Date('2025-04-05T09:51:00'),
+            previousThirdQuarter: new Date('2025-04-20T21:35:00')
+        },
+        transits: [
+            {
+                voidOfCourseStart: new Date('2025-04-18T07:38:00'),
+                date: new Date('2025-04-18T10:12:00'),
+                sign: 'capricorn'
+            },
+            {
+                voidOfCourseStart: new Date('2025-04-20T13:21:00'),
+                date: new Date('2025-04-20T19:22:00'),
+                sign: 'aquarius'
+            },
+            {
+                voidOfCourseStart: new Date('2025-04-22T17:55:00'),
+                date: new Date('2025-04-23T01:06:00'),
+                sign: 'pisces'
+            },
+            {
+                voidOfCourseStart: new Date('2025-04-24T10:57:00'),
+                date: new Date('2025-04-25T03:24:00'),
+                sign: 'aries'
+            },
+            {
+                voidOfCourseStart: new Date('2025-04-26T12:18:00'),
+                date: new Date('2025-04-27T03:17:00'),
+                sign: 'taurus'
+            },
+            {
+                voidOfCourseStart: new Date('2025-04-29T01:18:00'),
+                date: new Date('2025-04-29T02:34:00'),
+                sign: 'gemini'
+            },
+            {
+                voidOfCourseStart: new Date('2025-04-01T11:49:00'),
+                date: new Date('2025-05-01T03:23:00'),
+                sign: 'cancer'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-03T04:02:00'),
+                date: new Date('2025-05-03T07:29:00'),
+                sign: 'leo'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-05T09:03:00'),
+                date: new Date('2025-05-05T15:40:00'),
+                sign: 'virgo'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-08T00:11:00'),
+                date: new Date('2025-05-08T03:06:00'),
+                sign: 'libra'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-12T02:37:00'),
+                date: new Date('2025-05-13T04:35:00'),
+                sign: 'sagittarius'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-15T14:28:00'),
+                date: new Date('2025-05-15T15:58:00'),
+                sign: 'capricorn'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-18T00:27:00'),
+                date: new Date('2025-05-18T01:29:00'),
+                sign: 'aquarius'
+            },
+            {
+                voidOfCourseStart: new Date('2025-05-20T07:59:00'),
+                date: new Date('2025-05-20T08:28:00'),
+                sign: 'pisces'
+            }//*/
+        ],
+        debug: false
+    };
+
+    const lunarPhase = new LunarPhaseClass({
+        data: lunarPhaseDataSample,
+        parentContainer: document.getElementById('lunarPhaseContainer'),
+        margin: { left: 10, top: 10, right: 10, bottom: 10 }
+    });
+</script>
+</body>
+</html>
