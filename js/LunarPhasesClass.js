@@ -26,6 +26,44 @@ class LunarPhaseClass {
         this.data = config.data;
         this.container = config.parentContainer;
         this.margin = this.parseMargins(config.margin || 0);
+        const moonInfoKeys = [
+            'nextNewMoon', 'previousNewMoon', 'nextFirstQuarter', 'previousFirstQuarter',
+            'nextFullMoon', 'previousFullMoon', 'nextThirdQuarter', 'previousThirdQuarter'
+        ];
+        moonInfoKeys.forEach(key => {
+            if (this.data.moonInfo[key] && typeof this.data.moonInfo[key] === 'string') {
+                this.data.moonInfo[key] = new Date(this.data.moonInfo[key]);
+                if (isNaN(this.data.moonInfo[key].getTime())) {
+                    console.warn(`Invalid date for moonInfo.${key}: ${this.data.moonInfo[key]}`);
+                    this.data.moonInfo[key] = null;
+                }
+            }
+        });
+
+        // Convert transits date strings to Date objects
+        if (this.data.transits) {
+            this.data.transits = this.data.transits.map(transit => ({
+                ...transit,
+                date: typeof transit.date === 'string' ? new Date(transit.date) : transit.date,
+                voidOfCourseStart: transit.voidOfCourseStart && typeof transit.voidOfCourseStart === 'string'
+                    ? new Date(transit.voidOfCourseStart)
+                    : transit.voidOfCourseStart
+            })).map(transit => ({
+                ...transit,
+                date: isNaN(transit.date?.getTime()) ? null : transit.date,
+                voidOfCourseStart: transit.voidOfCourseStart && isNaN(transit.voidOfCourseStart.getTime()) ? null : transit.voidOfCourseStart
+            }));
+        }
+
+        // Convert data.date to Date object if it's a string
+        if (this.data.date && typeof this.data.date === 'string') {
+            this.data.date = new Date(this.data.date);
+            if (isNaN(this.data.date.getTime())) {
+                console.warn(`Invalid date for data.date: ${this.data.date}`);
+                this.data.date = new Date(); // Fallback to current date
+            }
+        }
+
         this.init();
 
         // Tooltip state
@@ -100,10 +138,14 @@ class LunarPhaseClass {
         } else {
             state = ball.isVoid ? 'Void of Course' : 'In Transit';
         }
+        let vocSystem = 'Modern';
+        if (ball.hellenistic) {
+            vocSystem = 'Hellenistic';
+        }
 
         const content = ball.isVoid
-            ? `${this.formatDate(ball.date)}\nVoid of Course\nState: ${state}`
-            : `${this.formatDate(ball.date)}\n${signs[ball.sign]} ${ball.sign.charAt(0).toUpperCase() + ball.sign.slice(1)}\nState: ${state}`;
+            ? `${this.formatDate(ball.date)}\nVoid of Course\nSystem: ${vocSystem}\nState: ${state}`
+            : `${this.formatDate(ball.date)}\n${signs[ball.sign]} ${ball.sign.charAt(0).toUpperCase() + ball.sign.slice(1)}\nSystem: ${vocSystem}\nState: ${state}`;
         tooltip.textContent = content;
 
         try {
@@ -825,9 +867,9 @@ class LunarPhaseClass {
 
             // Add vertical line for zodiac sign marker
             const transitLine = document.createElement('div');
-            transitLine.className = 'marker-line';
+            transitLine.className = 'marker-line' + (transit.hellenistic === true ? '.hellenistic' : '');
             transitLine.style.left = `${clampedTransitPos}px`;
-            transitLine.style.top = `${transitLineTop + blocksPaddingTop}px`;
+            transitLine.style.top = `${transitLineTop + blocksPaddingTop - (transit.hellenistic === true ? 28 : 0)}px`;
             transitLine.style.height = `${transitLineHeight}px`;
             transitLine.style.zIndex = '1';
             blocksContainer.appendChild(transitLine);
@@ -856,13 +898,14 @@ class LunarPhaseClass {
             }
             let nextTransit = (index + 1 < this.data.transits.length ? this.data.transits[index + 1] : null);
             marker.style.left = `${clampedTransitPos - baseTransitMarkerHeight / 2}px`;
-            marker.style.top = `${transitMarkerTop + blocksPaddingTop}px`;
+            marker.style.top = `${transitMarkerTop + blocksPaddingTop - (transit.hellenistic === true ? 28 : 0)}px`;
             marker.style.zIndex = '2';
             marker.textContent = signs[transit.sign];
             marker.addEventListener('click', (event) => {
                 this.createTooltip({
                     element: marker,
                     sign: transit.sign,
+                    hellenistic: transit.hellenistic === true,
                     nextTransit: nextTransit,
                     date: transitDate,
                     dateStart: transitDate,
@@ -909,7 +952,7 @@ class LunarPhaseClass {
                 const voidLine = document.createElement('div');
                 voidLine.className = 'void-marker-line';
                 voidLine.style.left = `${clampedVoidPos}px`;
-                voidLine.style.top = `${voidLineTop + blocksPaddingTop}px`;
+                voidLine.style.top = `${voidLineTop + blocksPaddingTop - (transit.hellenistic === true ? 28 : 0)}px`;
                 voidLine.style.height = `${voidLineHeight + 8}px`;
                 voidLine.style.zIndex = '1';
                 blocksContainer.appendChild(voidLine);
@@ -930,11 +973,12 @@ class LunarPhaseClass {
                     voidMarker.classList.add('highlight-ball');
                 }
                 voidMarker.style.left = `${clampedVoidPos - baseVoidMarkerHeight / 2}px`;
-                voidMarker.style.top = `${voidMarkerTop + blocksPaddingTop}px`;
+                voidMarker.style.top = `${voidMarkerTop + blocksPaddingTop - (transit.hellenistic === true ? 28 : 0)}px`;
                 voidMarker.style.zIndex = '1';
                 voidMarker.addEventListener('click', (event) => {
                     this.createTooltip({
                         element: voidMarker,
+                        hellenistic: transit.hellenistic === true,
                         date: voidDate,
                         dateStart: voidDate,
                         dateEnd: transitDate,
